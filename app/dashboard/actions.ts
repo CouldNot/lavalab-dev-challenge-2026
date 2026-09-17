@@ -30,7 +30,10 @@ export async function addTag(_state: TagActionState, formData: FormData): Promis
   if (!log) return { error: "This activity log could not be found." };
   const { data: tag, error: tagError } = await supabase.from("tags").upsert({ farm_id: log.farm_id, name: parsed.data.name, color: "#146C44" }, { onConflict: "farm_id,name" }).select("id").single();
   if (tagError || !tag) return { error: "The tag could not be saved." };
-  const { error } = await supabase.from("activity_log_tags").upsert({ activity_log_id: parsed.data.logId, tag_id: tag.id, created_by: userData.user.id }, { onConflict: "activity_log_id,tag_id" });
+  const { error } = await supabase.from("activity_log_tags").upsert(
+    { activity_log_id: parsed.data.logId, tag_id: tag.id, created_by: userData.user.id },
+    { onConflict: "activity_log_id,tag_id", ignoreDuplicates: true },
+  );
   if (error) return { error: "The tag could not be attached." };
   revalidatePath("/dashboard");
   return { success: `Added “${parsed.data.name}”` };

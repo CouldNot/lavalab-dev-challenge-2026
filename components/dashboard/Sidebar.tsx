@@ -2,7 +2,7 @@
 
 import {
   ArrowLeftRight, AudioLines, BookCheck, CalendarDays, ChartLine, ChartPie,
-  ChevronDown, CircleUserRound, Files, Handshake, Inbox, LogOut, Mail,
+  ChevronDown, CircleUserRound, Files, Handshake, Inbox, LockKeyhole, LogOut, Mail,
   Map, Settings, Users,
 } from "lucide-react";
 import { signOut } from "@/app/login/actions";
@@ -31,14 +31,14 @@ export default function Sidebar({ farmName, role, mapLogId, open, onClose }: { f
               <h2>{group.label}</h2>
               {group.items.map(([Icon, label]) => {
                 const active = label === "Dashboard";
-                const href = label === "Activity Logs" ? "#employee-logs" : label === "Map" && mapLogId ? `/dashboard?log=${mapLogId}#employee-logs` : undefined;
+                const href = label === "Dashboard" ? "/dashboard" : label === "Activity Logs" ? "#employee-logs" : label === "Map" && mapLogId ? `/dashboard?log=${mapLogId}#employee-logs` : undefined;
                 return href ? (
                   <a key={label} href={href} className={`${styles.navItem} ${active ? styles.navActive : ""}`}>
                     <Icon size={16} strokeWidth={1.55} /><span>{label}</span>{active ? <em>1</em> : null}
                   </a>
                 ) : (
-                  <button key={label} className={`${styles.navItem} ${active ? styles.navActive : ""}`} aria-disabled="true" title="Dashboard demo">
-                    <Icon size={16} strokeWidth={1.55} /><span>{label}</span>{active ? <em>1</em> : null}
+                  <button key={label} className={`${styles.navItem} ${styles.navItemUnavailable}`} disabled aria-disabled="true" title={`${label} is unavailable`}>
+                    <Icon size={16} strokeWidth={1.55} /><span>{label}</span><LockKeyhole className={styles.lockIcon} size={13} aria-hidden="true" />
                   </button>
                 );
               })}

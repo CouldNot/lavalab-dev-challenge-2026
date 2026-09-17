@@ -5,8 +5,8 @@ import dynamic from "next/dynamic";
 import type { Route } from "next";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
-  AudioLines, CalendarDays, ClipboardPenLine, Expand, Filter,
-  ListFilter, Menu, Percent, Search, Square, X,
+  ArrowDownUp, AudioLines, CalendarDays, CalendarRange, ChevronDown, ClipboardPenLine, Expand, Filter,
+  Menu, Percent, Search, Square, X,
 } from "lucide-react";
 import type { ActivityLog, DashboardSnapshot } from "@/lib/types";
 import Sidebar from "./Sidebar";
@@ -52,7 +52,7 @@ export default function Dashboard({ snapshot }: { snapshot: DashboardSnapshot })
         </header>
 
         <section className={styles.metrics} aria-label="Farm summary">
-          <article><div className={styles.metricLabel}><CalendarDays size={16} /><span>Todays Recordings</span></div><div className={styles.metricValue}><strong>{snapshot.metrics.todaysRecordings}</strong><span>{snapshot.metrics.newRecordings} New</span></div></article>
+          <article><div className={styles.metricLabel}><CalendarDays size={16} /><span>Today&apos;s Recordings</span></div><div className={styles.metricValue}><strong>{snapshot.metrics.todaysRecordings}</strong><span>{snapshot.metrics.newRecordings} New</span></div></article>
           <article><div className={styles.metricLabel}><ClipboardPenLine size={16} /><span>Active Workers</span></div><div className={styles.metricValue}><strong>{snapshot.metrics.activeWorkers}</strong></div></article>
           <article><div className={styles.metricLabel}><Percent size={16} /><span>Response Accuracy</span></div><div className={styles.metricValue}><strong>{snapshot.metrics.responseAccuracy}</strong></div></article>
         </section>
@@ -61,9 +61,8 @@ export default function Dashboard({ snapshot }: { snapshot: DashboardSnapshot })
           <header className={styles.panelHeader}>
             <div className={styles.panelTitle}><AudioLines size={16} /><h2>New Employee Logs ({snapshot.logs.length})</h2></div>
             <div className={styles.toolbar}>
-              <button className={styles.chipActive} onClick={() => update({ sort: snapshot.filters.sort === "date-asc" ? "date-desc" : "date-asc" })}><X size={16} /> Date</button>
-              <label className={styles.selectChip}><ListFilter size={16} /><select aria-label="Sort logs" value={snapshot.filters.sort ?? "date-asc"} onChange={(e) => update({ sort: e.target.value })}><option value="date-asc">Sort</option><option value="date-desc">Newest</option><option value="employee">Employee</option><option value="activity">Activity</option></select></label>
-              <button className={styles.chipActive} onClick={() => update({ range: snapshot.filters.range === "all" ? "month" : "all" })}><X size={16} /> This Month ({snapshot.logs.length})</button>
+              <label className={styles.selectChip}><ArrowDownUp size={16} /><span>Sort</span><select aria-label="Sort logs" value={snapshot.filters.sort ?? "date-asc"} onChange={(e) => update({ sort: e.target.value })}><option value="date-desc">Newest first</option><option value="date-asc">Oldest first</option><option value="employee">Employee A–Z</option><option value="activity">Activity A–Z</option></select><ChevronDown size={14} /></label>
+              <label className={styles.selectChip}><CalendarRange size={16} /><span>Show</span><select aria-label="Log range" value={snapshot.filters.range ?? "month"} onChange={(e) => update({ range: e.target.value })}><option value="month">Recent 4 logs</option><option value="all">All logs</option></select><ChevronDown size={14} /></label>
               <details className={styles.filterMenu}>
                 <summary><Filter size={16} /> Filter</summary>
                 <div className={styles.filterPopover}>
