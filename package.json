@@ -15,7 +15,7 @@
     "db:reset": "supabase db reset",
     "db:test": "supabase test db",
     "db:types": "supabase gen types typescript --local > lib/database.types.ts",
-    "bootstrap:demo": "node scripts/bootstrap-demo.mjs"
+    "bootstrap:demo": "node --env-file=.env.local scripts/bootstrap-demo.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",
