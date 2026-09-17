@@ -1,0 +1,29 @@
+:root {
+  --black: #000;
+  --ink: #4d4d4d;
+  --muted: #a6a6a6;
+  --soft: #ccc;
+  --line: #e6e6e6;
+  --line-soft: #f2f2f2;
+  --row: #f8f8f8;
+  --green-deep: #003930;
+  --green: #146c44;
+  --green-soft: rgb(20 108 68 / 10%);
+  --white: #fff;
+}
+
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  background: var(--white);
+  color: var(--black);
+  font-family: var(--font-geist-sans), Geist, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+button, input, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { color: inherit; }
+input::placeholder { color: var(--soft); opacity: 1; }
+::selection { background: rgb(20 108 68 / 18%); }
