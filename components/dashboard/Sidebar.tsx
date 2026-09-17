@@ -15,7 +15,7 @@ const groups = [
   { label: "OTHER", items: [[Settings, "Settings"], [Handshake, "Support"]] },
 ] as const;
 
-export default function Sidebar({ farmName, role, open, onClose }: { farmName: string; role: string; open: boolean; onClose: () => void }) {
+export default function Sidebar({ farmName, role, mapLogId, open, onClose }: { farmName: string; role: string; mapLogId?: string; open: boolean; onClose: () => void }) {
   return (
     <>
       {open ? <button aria-label="Close navigation" className={styles.backdrop} onClick={onClose} /> : null}
@@ -31,7 +31,7 @@ export default function Sidebar({ farmName, role, open, onClose }: { farmName: s
               <h2>{group.label}</h2>
               {group.items.map(([Icon, label]) => {
                 const active = label === "Dashboard";
-                const href = label === "Activity Logs" ? "#employee-logs" : label === "Map" ? "/dashboard?log=isaac-wang#employee-logs" : undefined;
+                const href = label === "Activity Logs" ? "#employee-logs" : label === "Map" && mapLogId ? `/dashboard?log=${mapLogId}#employee-logs` : undefined;
                 return href ? (
                   <a key={label} href={href} className={`${styles.navItem} ${active ? styles.navActive : ""}`}>
                     <Icon size={16} strokeWidth={1.55} /><span>{label}</span>{active ? <em>1</em> : null}

@@ -43,7 +43,7 @@ export default function Dashboard({ snapshot }: { snapshot: DashboardSnapshot })
 
   return (
     <main className={styles.dashboardPage}>
-      <Sidebar farmName={snapshot.farmName} role={snapshot.role} open={mobileNav} onClose={() => setMobileNav(false)} />
+      <Sidebar farmName={snapshot.farmName} role={snapshot.role} mapLogId={snapshot.logs[0]?.id} open={mobileNav} onClose={() => setMobileNav(false)} />
       <section className={styles.mainDash}>
         <header className={styles.topbar}>
           <button className={styles.menuButton} onClick={() => setMobileNav(true)} aria-label="Open navigation"><Menu /></button>
