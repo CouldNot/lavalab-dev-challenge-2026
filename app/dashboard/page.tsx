@@ -25,7 +25,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   const filters: DashboardFilters = {
     q: one(raw.q), sort: one(raw.sort) as DashboardFilters["sort"],
     range: (one(raw.range) as DashboardFilters["range"]) ?? "month",
-    field: one(raw.field), activity: one(raw.activity), log: one(raw.log),
+    field: one(raw.field), activity: one(raw.activity), status: one(raw.status) as DashboardFilters["status"], log: one(raw.log),
   };
   const snapshot = await getDashboardSnapshot(filters);
   return <Dashboard snapshot={snapshot} />;

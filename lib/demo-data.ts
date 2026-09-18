@@ -33,4 +33,7 @@ export const demoLogs: ActivityLog[] = rows.map((row, index) => ({
   latitude: 36.7378 + index * 0.004,
   longitude: -119.7871 + index * 0.004,
   tags: [],
+  reviewStatus: index === 0 ? "new" : index === 1 ? "flagged" : "reviewed",
+  reviewedAt: index === 0 ? null : row[3],
+  reviewNote: index === 1 ? "Confirm the harvest count before payroll is finalized." : null,
 }));

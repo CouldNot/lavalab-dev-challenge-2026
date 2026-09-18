@@ -1,7 +1,7 @@
 import { demoLogs } from "@/lib/demo-data";
 import { isSupabaseConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
-import type { ActivityLog, DashboardFilters, DashboardSnapshot, Tag } from "@/lib/types";
+import type { ActivityLog, DashboardFilters, DashboardSnapshot, ReviewStatus, Tag } from "@/lib/types";
 import { cookies } from "next/headers";
 
 export function applyFilters(logs: ActivityLog[], filters: DashboardFilters) {
@@ -10,6 +10,7 @@ export function applyFilters(logs: ActivityLog[], filters: DashboardFilters) {
     if (query && !`${log.employeeName} ${log.activityType} ${log.fieldName}`.toLowerCase().includes(query)) return false;
     if (filters.field && log.fieldName !== filters.field) return false;
     if (filters.activity && log.activityType !== filters.activity) return false;
+    if (filters.status && log.reviewStatus !== filters.status) return false;
     return true;
   });
 
@@ -38,15 +39,20 @@ export async function getDashboardSnapshot(filters: DashboardFilters): Promise<D
   if (!isSupabaseConfigured) {
     const store = await cookies();
     const localTags = JSON.parse(store.get("toph-local-tags")?.value ?? "{}") as Record<string, string[]>;
+    let localReviews: Record<string, { status: ReviewStatus; note: string | null; reviewedAt: string | null }> = {};
+    try { localReviews = JSON.parse(store.get("toph-local-reviews")?.value ?? "{}") as typeof localReviews; } catch { /* Ignore malformed local demo state. */ }
     const localLogs = demoLogs.map((log) => ({
       ...log,
       tags: (localTags[log.id] ?? []).map((name) => ({ id: name.toLowerCase().replaceAll(" ", "-"), name, color: "#146C44" })),
+      reviewStatus: localReviews[log.id]?.status ?? log.reviewStatus,
+      reviewNote: localReviews[log.id]?.note ?? log.reviewNote,
+      reviewedAt: localReviews[log.id]?.reviewedAt ?? log.reviewedAt,
     }));
     const logs = applyFilters(localLogs, filters);
     return {
       farmName: "Bays Ranch",
       role: "Admin",
-      metrics: { todaysRecordings: 5, newRecordings: 1, activeWorkers: 12, responseAccuracy: 90 },
+      metrics: { todaysRecordings: 5, newRecordings: localLogs.filter((log) => log.reviewStatus === "new").length, activeWorkers: 12, responseAccuracy: 90 },
       logs,
       fields: [...new Set(localLogs.map((log) => log.fieldName))],
       activities: [...new Set(localLogs.map((log) => log.activityType))],
@@ -83,6 +89,9 @@ export async function getDashboardSnapshot(filters: DashboardFilters): Promise<D
       transcript: row.transcript!, summary: row.summary!, responseAccuracy: row.response_accuracy!,
       audioUrl: audioUrl ?? "/api/demo-audio", waveform: Array.isArray(row.waveform_peaks) ? row.waveform_peaks.map(Number) : [],
       latitude: row.latitude!, longitude: row.longitude!, tags: parseTags(row.tags),
+      reviewStatus: (row.review_status as ReviewStatus | undefined) ?? "new",
+      reviewedAt: row.reviewed_at,
+      reviewNote: row.review_note,
     };
   }));
 

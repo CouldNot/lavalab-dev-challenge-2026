@@ -19,5 +19,7 @@ describe("dashboard filtering", () => {
     expect(applyFilters(demoLogs, { range: "all", sort: "employee" })[0].employeeName).toBe("Benjamin Moore");
     expect(applyFilters(demoLogs, { field: "FIELD D" })).toHaveLength(1);
     expect(applyFilters(demoLogs, { activity: "Spraying" })[0].id).toBe("isaac-wang");
+    expect(applyFilters(demoLogs, { status: "new", range: "all" }).map((log) => log.id)).toEqual(["isaac-wang"]);
+    expect(applyFilters(demoLogs, { status: "flagged", range: "all" }).map((log) => log.id)).toEqual(["maya-patel"]);
   });
 });

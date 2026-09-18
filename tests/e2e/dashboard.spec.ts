@@ -34,7 +34,7 @@ test("renders the high-fidelity dashboard and expands a recording", async ({ pag
     await page.keyboard.press("Escape");
   }
   await page.getByRole("combobox", { name: "Log range" }).selectOption("all");
-  await expect(page.getByRole("heading", { name: "New Employee Logs (11)" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Employee Logs (11)" })).toBeVisible();
   await page.getByRole("combobox", { name: "Sort logs" }).selectOption("date-desc");
   await expect(page.getByRole("row").nth(1)).toContainText("Benjamin Moore");
   await page.getByRole("button", { name: "View", exact: true }).first().click();
@@ -56,4 +56,17 @@ test("searches and persists a tag", async ({ page }) => {
   await page.reload();
   await page.getByRole("button", { name: "Add Tag" }).click();
   await expect(page.getByText("Needs follow-up")).toBeVisible();
+});
+
+test("reviews, flags, and filters recordings in local-demo mode", async ({ page }) => {
+  await page.getByRole("button", { name: "View", exact: true }).first().click();
+  await expect(page.getByRole("region", { name: "Recording review" })).toContainText("Needs review");
+  await page.getByRole("combobox", { name: "Decision" }).selectOption("flagged");
+  await page.getByRole("textbox", { name: /Review note/ }).fill("Please verify the application rate.");
+  await page.getByRole("button", { name: "Flag for follow-up" }).click();
+  await expect(page.getByRole("row").nth(1)).toContainText("Flagged");
+  await page.reload();
+  await expect(page.getByRole("row").nth(1)).toContainText("Flagged");
+  await page.getByText("0 to review").click();
+  await expect(page.getByRole("heading", { name: "Employee Logs (0)" })).toBeVisible();
 });

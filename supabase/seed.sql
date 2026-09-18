@@ -36,3 +36,8 @@ insert into public.activity_logs (id, farm_id, employee_id, field_id, activity_t
 insert into public.recordings (activity_log_id, duration_seconds, waveform_peaks)
 select id, 48, '[7,11,7,7,11,7,14,7,35,81,35,7,9,7,11,7,44,11,18,7,11,7,16,7,11,7,35,7,11,7,11,7,25,11,9,7,11,7,11,7,25,7,63,7,11,7,11,7,51,11,25,7,11,7,25,7,12,7,26,7,11,7,11,7,35,11,14,7,11,7,9,7,12,7,49,7,11,7,11,7,44,11,18,7,11,7,40,7,11,7,21,7,11,7,11,7]'::jsonb
 from public.activity_logs;
+
+update public.activity_logs
+set reviewed_at = ingested_at - interval '15 minutes',
+    review_note = case when id = '40000000-0000-0000-0000-000000000002'::uuid then 'Verify the harvest count before payroll is finalized.' else null end
+where review_status in ('reviewed', 'flagged');

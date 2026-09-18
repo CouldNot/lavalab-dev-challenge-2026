@@ -8,8 +8,9 @@ A full-stack implementation of the supplied Toph dashboard design. The reference
 - One-click demo authentication with server-managed Supabase sessions.
 - Persistent farms, memberships, employees, fields, activity logs, recordings, and tags.
 - Private audio storage with short-lived signed playback URLs.
-- Search, sorting, field/activity filters, month/all toggling, row expansion, audio playback, tag creation, map preview, and an expanded map dialog.
-- Local fallback mode for review without credentials; its sign-in and added tags persist in secure cookies.
+- Search, sorting, field/activity/review filters, month/all toggling, row expansion, audio playback, tag creation, map preview, and an expanded map dialog.
+- A role-protected review queue: managers can mark recordings reviewed, flag follow-up, or return them to the queue. Every decision is retained in an append-only, farm-scoped audit trail.
+- Local fallback mode for review without credentials; its sign-in, tags, and review decisions persist in secure cookies.
 - Responsive desktop, tablet, and mobile behavior.
 - Type, lint, unit, browser, production-build, and database-policy test coverage.
 

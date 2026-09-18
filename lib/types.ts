@@ -1,4 +1,5 @@
 export type Tag = { id: string; name: string; color: string };
+export type ReviewStatus = "new" | "reviewed" | "flagged";
 
 export type ActivityLog = {
   id: string;
@@ -15,6 +16,9 @@ export type ActivityLog = {
   latitude: number;
   longitude: number;
   tags: Tag[];
+  reviewStatus: ReviewStatus;
+  reviewedAt: string | null;
+  reviewNote: string | null;
 };
 
 export type DashboardMetrics = {
@@ -30,6 +34,7 @@ export type DashboardFilters = {
   range?: "month" | "all";
   field?: string;
   activity?: string;
+  status?: ReviewStatus;
   log?: string;
 };
 

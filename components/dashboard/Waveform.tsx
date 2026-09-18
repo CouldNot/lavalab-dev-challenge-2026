@@ -24,7 +24,7 @@ export default function Waveform({ log, onTag }: { log: ActivityLog; onTag: () =
   };
 
   return (
-    <div className={styles.recordingColumn}>
+    <div className={styles.waveformContent}>
       {log.audioUrl ? <audio ref={audioRef} src={log.audioUrl} onTimeUpdate={(event) => {
         const audio = event.currentTarget;
         if (audio.duration) setProgress(audio.currentTime / audio.duration);
